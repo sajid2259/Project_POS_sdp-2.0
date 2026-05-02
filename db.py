@@ -36,12 +36,12 @@ def init():
 
         try: 
             c.execute("ALTER TABLE sales ADD COLUMN timestamp DATETIME")
-            c.execute("UPDATE sales SET timestamp = CURRENT_TIMESTAMP WHERE timestamp IS NULL")
+            c.execute("UPDATE sales SET timestamp = datetime('now','localtime') WHERE timestamp IS NULL")
         except sqlite3.OperationalError: pass
         
         try: 
             c.execute("ALTER TABLE credit ADD COLUMN timestamp DATETIME")
-            c.execute("UPDATE credit SET timestamp = CURRENT_TIMESTAMP WHERE timestamp IS NULL")
+            c.execute("UPDATE credit SET timestamp = datetime('now','localtime') WHERE timestamp IS NULL")
         except sqlite3.OperationalError: pass
         
         try: c.execute("ALTER TABLE credit ADD COLUMN phone TEXT")
