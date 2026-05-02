@@ -89,7 +89,7 @@ def add(customer_id, customer_name, phone, email, name_or_barcode, qty_s, tree=N
             "SELECT phone, email FROM customers WHERE id=?", (customer_id,)
         ).fetchone()
         c.execute(
-            "INSERT INTO credit(customer_id,customer,phone,email,product,quantity,amount,timestamp) VALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)",
+            "INSERT INTO credit(customer_id,customer,phone,email,product,quantity,amount,timestamp) VALUES(?,?,?,?,?,?,?,datetime('now','localtime'))",
             (customer_id, customer_name_db, customer_phone, customer_email, actual_name, qty, amount)
         )
         c.execute("UPDATE products SET stock=stock-? WHERE id=?", (qty, p["id"]))
@@ -105,7 +105,7 @@ def pay(cid, tree=None):
         r = c.execute("SELECT id,customer,phone,email,product,quantity,amount,timestamp,customer_id FROM credit WHERE id=?", (cid,)).fetchone()
         if not r: return "Not found", None
         row = dict(zip(["id","customer","phone","email","product","quantity","amount","timestamp","customer_id"], r))
-        c.execute("INSERT INTO sales(product,quantity,total,timestamp) VALUES(?,?,?,CURRENT_TIMESTAMP)", (row["product"], row["quantity"], row["amount"]))
+        c.execute("INSERT INTO sales(product,quantity,total,timestamp) VALUES(?,?,?,datetime('now','localtime'))", (row["product"], row["quantity"], row["amount"]))
         c.execute("DELETE FROM credit WHERE id=?", (cid,))
     if tree: load(tree)
     return None, row
