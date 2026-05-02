@@ -44,7 +44,7 @@ def checkout(items, tree=None):
     with db.con() as c:
         for row in prepared:
             c.execute(
-                "INSERT INTO sales(product,quantity,total,timestamp) VALUES(?,?,?,CURRENT_TIMESTAMP)",
+                "INSERT INTO sales(product,quantity,total,timestamp) VALUES(?,?,?,datetime('now','localtime'))",
                 (row["product"], row["qty"], row["total"]),
             )
             sale_ids.append(c.execute("SELECT last_insert_rowid()").fetchone()[0])
