@@ -173,7 +173,7 @@ class CreditCustomersView(ctk.CTkFrame):
             # Move all to sales
             c.execute("""
                 INSERT INTO sales (product, quantity, total, timestamp)
-                SELECT product, quantity, amount, CURRENT_TIMESTAMP
+                SELECT product, quantity, amount, datetime('now','localtime')
                 FROM credit WHERE customer_id=?
             """, (customer_id,))
             
